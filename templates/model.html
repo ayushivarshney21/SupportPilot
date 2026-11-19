@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Model Performance{% endblock %}
+{% block content %}
+<h1>Model Performance</h1>
+<p class="page-sub">Evaluation of the category classifier on a held-out test set (20% of the cleaned dataset).</p>
+<div class="tiles" style="grid-template-columns:repeat(3,1fr)">
+  <div class="tile"><b>{{ metrics.get('Accuracy', 'N/A') }}</b><span>Accuracy</span></div>
+  <div class="tile"><b>{{ metrics.get('Macro F1', 'N/A') }}</b><span>Macro F1</span></div>
+  <div class="tile"><b>TF-IDF + Logistic Regression</b><span>Model</span></div>
+</div>
+<div class="grid-2">
+  <section class="card"><h2>Classification Report</h2><pre>{{ report or 'Run train_classifier.py to generate the report.' }}</pre></section>
+  <section class="card"><h2>Confusion Matrix</h2>
+    {% if has_matrix %}<img class="matrix" src="{{ url_for('confusion_matrix_image') }}" alt="Confusion matrix">
+    {% else %}<p class="meta">Run train_classifier.py to generate the confusion matrix.</p>{% endif %}
+  </section>
+</div>
+{% endblock %}

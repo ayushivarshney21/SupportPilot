@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Ticket {{ t.ticket_id }}{% endblock %}
+{% block content %}
+<div class="head-row">
+  <div><h1>Ticket {{ t.ticket_id }}</h1><div class="meta">Submitted {{ t.created_at }} &middot; {{ t.department }}</div></div>
+  <div><span class="meta">Priority&nbsp;</span><span class="badge {{ t.priority }}">{{ t.priority }}</span></div>
+</div>
+
+<div class="grid-2">
+  <section class="card">
+    <h2>Request Details</h2>
+    <table class="kv">
+      <tr><th>Employee</th><td>{{ t.employee }}</td></tr>
+      <tr><th>Email</th><td>{{ t.email }}</td></tr>
+      <tr><th>Department</th><td>{{ t.department }}</td></tr>
+      <tr><th>Title</th><td>{{ t.title }}</td></tr>
+      <tr><th>Description</th><td>{{ t.description }}</td></tr>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>AI Assessment</h2>
+
+    <div class="metric">
+      <div class="metric-top"><span class="metric-name">Category</span><span class="metric-val">{{ t.category }}</span></div>
+      <div class="bar"><div class="fill" style="width: {{ t.confidence }}%"></div></div>
+      <div class="scale"><span>Model confidence</span><span>{{ '%.1f'|format(t.confidence) }}%</span></div>
+    </div>
+
+    <div class="metric">
+      <div class="metric-top"><span class="metric-name">Severity</span>
+        <span class="metric-val"><span class="lvl {{ t.severity }}">{{ t.severity }}</span> &middot; {{ '%.0f'|format(t.severity_score) }}%</span></div>
+      <div class="bar"><div class="fill {{ t.severity }}" style="width: {{ t.severity_score }}%"></div></div>
+      <div class="scale"><span>Low &lt;30</span><span>Medium 30&ndash;49</span><span>High 50&ndash;79</span><span>Critical 80+</span></div>
+    </div>
+
+    <table class="kv">
+      <tr><th>Business impact</th><td><span class="lvl {{ t.business_impact }}">{{ t.business_impact }}</span></td></tr>
+      <tr><th>Priority</th><td><span class="badge {{ t.priority }}">{{ t.priority }}</span></td></tr>
+      <tr><th>Indicators detected</th><td class="tags">
+        {% for i in t.indicators %}<span>{{ i }}</span>{% else %}<span class="meta">None</span>{% endfor %}</td></tr>
+    </table>
+    <p class="note">Category is predicted by a trained machine-learning classifier. The severity score is calculated from weighted indicator phrases in the ticket text; priority combines severity and business impact.</p>
+  </section>
+</div>
+
+{% if t.top_categories %}
+<section class="card" style="margin-top:22px">
+  <h2>Category Probability Distribution</h2>
+  {% for c in t.top_categories %}
+  <div class="metric" style="margin-bottom:12px">
+    <div class="metric-top"><span>{{ c.category }}</span><span><b>{{ '%.1f'|format(c.pct) }}%</b></span></div>
+    <div class="bar"><div class="fill" style="width: {{ c.pct }}%"></div></div>
+  </div>
+  {% endfor %}
+</section>
+{% endif %}
+
+<p style="margin-top:20px"><a href="{{ url_for('index') }}">Submit another ticket</a> &nbsp;|&nbsp; <a href="{{ url_for('tickets') }}">Back to ticket queue</a></p>
+{% endblock %}

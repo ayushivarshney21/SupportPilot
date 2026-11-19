@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+venv/
+.venv/
+.env
+.vscode/
+
+# local database (contains test tickets)
+*.db
+
+# datasets (download from Kaggle instead)
+*.csv
+
+# trained model files (recreate with train_classifier.py)
+models/*.joblib

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Ticket Queue{% endblock %}
+{% block content %}
+<h1>Ticket Queue</h1>
+<p class="page-sub">All submitted tickets, ordered by priority and then by most recent.</p>
+<div class="tiles">
+  <div class="tile"><b>{{ stats.total }}</b><span>Total tickets</span></div>
+  <div class="tile P1"><b>{{ stats.P1 }}</b><span>P1 &middot; Critical</span></div>
+  <div class="tile P2"><b>{{ stats.P2 }}</b><span>P2 &middot; High</span></div>
+  <div class="tile P3"><b>{{ stats.P3 }}</b><span>P3 &middot; Medium</span></div>
+  <div class="tile P4"><b>{{ stats.P4 }}</b><span>P4 &middot; Low</span></div>
+</div>
+<div class="card" style="padding:0;overflow:auto">
+  <table class="list">
+    <tr><th>Ticket</th><th>Submitted</th><th>Employee</th><th>Department</th><th>Title</th><th>Category</th><th>Severity</th><th>Priority</th><th>Confidence</th></tr>
+    {% for t in tickets %}
+    <tr>
+      <td><a href="{{ url_for('show_ticket', ticket_id=t.ticket_id) }}">{{ t.ticket_id }}</a></td>
+      <td>{{ t.created_at }}</td><td>{{ t.employee }}</td><td>{{ t.department }}</td><td>{{ t.title }}</td>
+      <td>{{ t.category }}</td>
+      <td><span class="lvl {{ t.severity }}">{{ t.severity }}</span> {{ '%.0f'|format(t.severity_score) }}%</td>
+      <td><span class="badge {{ t.priority }}">{{ t.priority }}</span></td>
+      <td>{{ '%.1f'|format(t.confidence) }}%</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="9" class="meta" style="padding:24px">No tickets submitted yet.</td></tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

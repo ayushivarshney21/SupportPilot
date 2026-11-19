@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Submit Ticket{% endblock %}
+{% block content %}
+<h1>Submit an IT Support Request</h1>
+<p class="page-sub">Describe the issue below. The request is classified, assessed for severity and assigned a priority automatically.</p>
+<div class="grid-form">
+  <form class="card" method="post" action="{{ url_for('submit') }}">
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+    <h2>Request Details</h2>
+    <div class="fields">
+      <div><label for="employee">Employee Name</label>
+        <input id="employee" name="employee" value="{{ form.employee or '' }}" required></div>
+      <div><label for="email">Work Email</label>
+        <input id="email" type="email" name="email" value="{{ form.email or '' }}" required></div>
+      <div class="full"><label for="department">Department</label>
+        <select id="department" name="department" required>
+          {% for d in departments %}<option {{ 'selected' if form.department == d }}>{{ d }}</option>{% endfor %}
+        </select></div>
+      <div class="full"><label for="title">Ticket Title</label>
+        <input id="title" name="title" value="{{ form.title or '' }}" maxlength="120" required></div>
+      <div class="full"><label for="description">Ticket Description</label>
+        <textarea id="description" name="description" required>{{ form.description or '' }}</textarea></div>
+      <div class="full"><button class="btn" type="submit">Submit Ticket</button></div>
+    </div>
+  </form>
+  <aside class="card">
+    <h2>Processing Workflow</h2>
+    <ol class="steps">
+      <li>Ticket intake<span>The request is converted to a standard ticket record with a unique ID.</span></li>
+      <li>Text pre-processing<span>The text is cleaned and normalised for analysis.</span></li>
+      <li>Category classification<span>A trained classifier predicts the issue category with a confidence score.</span></li>
+      <li>Severity and priority<span>Severity score and business impact determine the priority, P1 to P4.</span></li>
+    </ol>
+  </aside>
+</div>
+{% endblock %}

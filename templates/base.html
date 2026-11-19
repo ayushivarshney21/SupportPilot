@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{% endblock %} | SupportPilot</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="topbar"><div class="wrap topbar-inner">
+  <div><span class="brand-name">SupportPilot</span><span class="brand-sub">AI Ticket Resolution Agent</span></div>
+  <nav>
+    <a href="{{ url_for('index') }}" class="{{ 'active' if request.endpoint in ('index','submit') }}">Submit Ticket</a>
+    <a href="{{ url_for('tickets') }}" class="{{ 'active' if request.endpoint in ('tickets','show_ticket') }}">Ticket Queue</a>
+    <a href="{{ url_for('model_page') }}" class="{{ 'active' if request.endpoint == 'model_page' }}">Model Performance</a>
+  </nav>
+</div></header>
+<main class="wrap">{% block content %}{% endblock %}</main>
+<footer>SupportPilot &middot; IT Service Desk Automation &middot; Milestone 1: Ticket Intake and Classification</footer>
+</body>
+</html>
